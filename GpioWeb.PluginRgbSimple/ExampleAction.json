@@ -1,0 +1,15 @@
+﻿[
+  {
+    "$type": "GpioWeb.PluginRgbSimple.RgbSimpleAction, GpioWeb.PluginRgbSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "config": "RgbSimpleAction",
+    "enabled": true,
+    "preDelay": 0,
+    "postDelay": 0,
+    "startDuration": 2000,
+    "endDuration": 500,
+    "loops": 4,
+    "startValues": [ true, true, true ],
+    "endValues": [ false, false, false ],
+    "taskId": "90c180f8-ad5d-4105-84e3-22e8c92f88fb"
+  }
+]
