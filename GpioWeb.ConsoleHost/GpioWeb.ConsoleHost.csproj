@@ -117,18 +117,21 @@
     <Content Include="Content\GpioConsoleHost.jpg" />
     <Content Include="Content\IMG_1015.jpg" />
     <Content Include="Content\IMG_1016.jpg" />
+    <Content Include="plugin\Raspberry.IO.Components.dll" />
     <Content Include="plugin\Raspberry.IO.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="plugin\Raspberry.IO.GeneralPurpose.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="plugin\Raspberry.IO.InterIntegratedCircuit.dll" />
     <Content Include="plugin\Raspberry.IO.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="plugin\Raspberry.System.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="plugin\UnitsNet.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GpioWeb.Core\GpioWeb.Core.csproj">
