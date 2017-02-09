@@ -1,10 +1,5 @@
-RaspberryPi.DotNet.GpioWeb  
-https://bitbucket.org/PaulTechGuy/raspberrypi.dotnet.gpioweb
-
 GPIO .NET Web Service Platform  
 Copyright (c) 2017 Paul Carver
-
-[TOC]
 
 # Web Service Introduction
 This web service allows client applications to POST an array of *actions*, formatted as JSON, to a service endpoint. Several basic actions are included (control LEDs, RGBs, Buzzers), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin.
