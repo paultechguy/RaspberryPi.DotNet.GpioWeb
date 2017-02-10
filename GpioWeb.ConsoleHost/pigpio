@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 dir="/home/pi/monotest/gpioserver"
-cmd="nohup sudo mono GpioConsoleHost.exe"
+cmd="nohup sudo mono ConsoleHost.exe"
 user=""
 
 name=`basename $0`
