@@ -2,7 +2,7 @@ GPIO .NET Web Service Platform
 Copyright (c) 2017 Paul Carver
 
 # Web Service Introduction
-This web service allows client applications to POST an array of *actions*, formatted as JSON, to a service endpoint. Several basic actions are included (control LEDs, RGBs, Buzzers), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin.
+The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The service platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
 
 Several other web service endpoints exist to manage executing actions, these include listing actions and requesting deletion of an executing action.
 
@@ -16,7 +16,7 @@ The repository has been tested with:
 * [Raspberry# IO](https://github.com/raspberry-sharp/raspberry-sharp-io) as of February 1, 2017
 
 # Building Web Service
-The web service solution, RaspberryPi.GpioWeb.sln, can be built on a Windows computer using Visual Studio 2015.  You must have .NET 4.6.2+ installed.  After building the solution, copy the GpioWeb.ConsoleHost output to the Raspberry Pi to a directory of your choosing; the copy should include all files and sub-directories in the GpioWeb.ConsoleHost Release or Debug directory.
+The GPIO .NET Web Service Platform solution solution, RaspberryPi.GpioWeb.sln, can be built on a Windows computer using Visual Studio 2015.  You must have .NET 4.6.2+ installed.  After building the solution, copy the GpioWeb.ConsoleHost output to the Raspberry Pi to a directory of your choosing; the copy should include all files and sub-directories in the GpioWeb.ConsoleHost Release or Debug directory.
 
 # Starting / Stopping Web Service
 On the Raspberry Pi, you can execute the web service as either a console application or as a Linux daemon.  The default IP address and port for hosting the web service are configured in the GpioConsoleHost.exe.config file.
@@ -24,6 +24,8 @@ On the Raspberry Pi, you can execute the web service as either a console applica
 To execute the service as a console application, invoke the web service executable using Mono.  This should be done using the Linux *sudo* command since the web service requires low-level permissions to access the Pi GPIO capabilities.
 
 	sudo mono ConsoleHost.exe
+
+To stop the console application, press Ctrl-C.
 
 To execute the web service as a Linux daemon, perform the following steps:
 
@@ -162,6 +164,10 @@ Finally, if you want to get information on just a single executing action, you c
 
 # Writing GPIO Action Plugins
 Coming soon.  If you can't wait, you can use the existing Visual Studio GpioWeb.PluginLedSimple project as a template to create your own project.  Hint...when all is said and done, you will place your new plugin DLL file(s) into the *plugin* directory and create a configuration file in the *instance* directory. The included plugin projects include *Post Build* events that copy the plugin DLL automatically to the GpioWeb.ConsoleHost bin directory so you can just copy/paste these into your own plugin project.
+
+# Additional Learning Resources
+The [RaspberryPi.DotNet.GpioExamples](https://bitbucket.org/PaulTechGuy/raspberrypi.dotnet.gpioexamples) repository contains a great set example programs written in C# to help you learn to control components that are attached to the GPIO pins of the Raspberry Pi.
+
 
 # Contact
 You can contact us at <raspberrypi@paultechguy.com>.
