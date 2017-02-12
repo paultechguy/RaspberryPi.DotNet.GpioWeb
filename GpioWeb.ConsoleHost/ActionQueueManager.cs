@@ -145,8 +145,13 @@ namespace GpioWeb.GpioConsoleHost
 				{
 					foreach (var action in actions)
 					{
-						Log($"   Action queued: {action.GetType().FullName}, config: {action.ConfigName}");
+						if (!action.Enabled)
+						{
+							Log($"   Action skipped (not enabled): {action.GetType().FullName}, config: {action.ConfigName}");
+							continue;
+						}
 
+						Log($"   Action queued: {action.GetType().FullName}, config: {action.ConfigName}");
 						ActionQueueItem item = new ActionQueueItem(action, action.ConfigName, "localhost");
 						this.Enqueue(item);
 					}

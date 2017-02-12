@@ -63,6 +63,8 @@ namespace GpioWeb.GpioConsoleHost
 
 		private void StartFileWatcher()
 		{
+			// TODO: placeholder here to start a file watcher in case a config changes
+			// in real-time...and we can dynamically load
 		}
 
 		private void StopFileWatcher()
