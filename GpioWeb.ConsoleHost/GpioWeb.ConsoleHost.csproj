@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GpioWeb.ConsoleHost</RootNamespace>
-    <AssemblyName>ConsoleHost</AssemblyName>
+    <AssemblyName>gpioweb</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -103,7 +103,7 @@
     </None>
     <None Include="Content\GpioConsoleHost.fzz" />
     <None Include="packages.config" />
-    <None Include="pigpio">
+    <None Include="gpioweb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="plugin\README.md">

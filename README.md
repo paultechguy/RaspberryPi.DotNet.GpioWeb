@@ -19,34 +19,35 @@ The repository has been tested with:
 The GPIO .NET Web Service Platform solution solution, RaspberryPi.GpioWeb.sln, can be built on a Windows computer using Visual Studio 2015.  You must have .NET 4.6.2+ installed.  After building the solution, copy the GpioWeb.ConsoleHost output to the Raspberry Pi to a directory of your choosing; the copy should include all files and sub-directories in the GpioWeb.ConsoleHost Release or Debug directory.
 
 # Starting / Stopping Web Service
-On the Raspberry Pi, you can execute the web service as either a console application or as a Linux daemon.  The default IP address and port for hosting the web service are configured in the GpioConsoleHost.exe.config file.
+On the Raspberry Pi, you can execute the web service as either a console application or as a Linux daemon.  The default IP address and port for hosting the web service are configured in the gpioweb.exe.config file.
 
 To execute the service as a console application, invoke the web service executable using Mono.  This should be done using the Linux *sudo* command since the web service requires low-level permissions to access the Pi GPIO capabilities.
 
-	sudo mono ConsoleHost.exe
+	sudo mono gpioweb.exe
 
 To stop the console application, press Ctrl-C.
 
 To execute the web service as a Linux daemon, perform the following steps:
 
-* Modify the *dir* variable in GpioWeb.ConsoleHost/pigpio file to reflect the directory where you copied the executables in the previous step
-* Copy the file GpioWeb.ConsoleHost/pigpio to /etc/init.d on your Raspberry Pi
+* Modify the *dir* variable in GpioWeb.ConsoleHost/gpioweb file to reflect the directory where you copied the executables in the previous step
+* Copy the file GpioWeb.ConsoleHost/gpioweb to /etc/init.d on your Raspberry Pi
 * Create the Raspberry Pi startup scripts by executing:
 
+	cd /etc/init.d
 	sudo update-rc.d -f script defaults
 
 * Reboot the Raspberry Pi (web service should now start automatically)
 * Manage the web service on the Raspberry Pi
-    * sudo service pigpio status (is the web service running?)
-    * sudo service pigpio stop
-    * sudo service pigpio start
-    * sudo service pigpio restart
+    * sudo service gpioweb status (is the web service running?)
+    * sudo service gpioweb stop
+    * sudo service gpioweb start
+    * sudo service gpioweb restart
 * View log files on the Raspberry Pi
-    * Standard: /var/log/pigpio.log
-    * Error: /var/log/pigpio.err
+    * Standard: /var/log/gpioweb.log
+    * Error: /var/log/gpioweb.err
 
 # Testing Web Service
-Once you have the web service running and there are no errors in the /var/log/pigpio.err log file, you are ready to test the service.
+Once you have the web service running and there are no errors in the /var/log/gpioweb.err log file, you are ready to test the service.
 
 ## Ping Test
 The simplest way to make sure the web service is up and running is to perform a GET on the *ping* endpoint. This can be done using a web browser on your Raspberry Pi computer.  Open up your browser and navigate to (this assumes your are using the default IP address of 127.0.0.1 for hosting the web service):
@@ -104,14 +105,14 @@ Plugin code is given the JSON instructions and will execute the proper logic to 
 Plugin configuration data is also given to the plugin code during execution so that the plugin can know about action-specific information.  For example, configuration data for the LED action indicates which GPIO pin the LED is connected to.  Since there could possibly be several individual LEDs on a breadboard, the plugin is given a set of configuration data that related to a specific LED.  Another example of possible configuration data is a Internet URI address that determines where a plugin will send temperature data.
 
 **Included Actions**  
-The GPIO web service comes pre-packaged with four (4) actions, along with a default set of configuration data for each action.  These actions are represented by .NET DLL files in the GpioConsoleHost.exe *plugin* directory; the configuration data for each action is located in the *config* directory.  The included actions are:
+The GPIO web service comes pre-packaged with four (4) actions, along with a default set of configuration data for each action.  These actions are represented by .NET DLL files in the gpioweb.exe *plugin* directory; the configuration data for each action is located in the *config* directory.  The included actions are:
 
 * BuzzerSimpleAction
 * LedSimpleAction
 * RgbSimpleAction
 * LedBuzzerSimpleAction
 
-Example JSON for each action can be found in the DotNetKickstart *GpioWebService* project directories; the example JSON file name in each directory is *ExampleAction.json*.
+Example JSON for each action can be found in each example project directory; the example JSON file name in each directory is *ExampleAction.json*.
 
 **Submitting Actions**  
 You submit one or more actions, by POSTing a JSON array, to the following web service endpoint (adjust the host IP/name and port number as required):

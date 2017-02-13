@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          pigpio
+# Provides:          gpioweb
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -9,8 +9,8 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir="/home/pi/monotest/gpioserver"
-cmd="nohup sudo mono ConsoleHost.exe"
+dir="/home/username/bin"
+cmd="nohup sudo mono gpioweb.exe"
 user=""
 
 name=`basename $0`
