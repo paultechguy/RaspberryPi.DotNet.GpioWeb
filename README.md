@@ -33,7 +33,6 @@ To execute the web service as a Linux daemon, perform the following steps:
 * Copy the file GpioWeb.ConsoleHost/gpioweb to /etc/init.d on your Raspberry Pi
 * Create the Raspberry Pi startup scripts by executing:
 
-	cd /etc/init.d
 	sudo update-rc.d -f script defaults
 
 * Reboot the Raspberry Pi (web service should now start automatically)
@@ -45,6 +44,15 @@ To execute the web service as a Linux daemon, perform the following steps:
 * View log files on the Raspberry Pi
     * Standard: /var/log/gpioweb.log
     * Error: /var/log/gpioweb.err
+
+If you encounter any errors upon starting the service, consider manually executing it via a terminal window with:
+
+	sudo /etc/init.d/gpioweb start
+
+# Removing Web Service
+You may remove the GPIO .NET Web Service via the following command:
+
+	sudo update-rc.d -f gpioweb remove
 
 # Testing Web Service
 Once you have the web service running and there are no errors in the /var/log/gpioweb.err log file, you are ready to test the service.
