@@ -9,7 +9,7 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir="/home/bin"
+dir="/home/username/gpiowebdir"
 cmd="nohup sudo mono gpioweb.exe"
 user=""
 
