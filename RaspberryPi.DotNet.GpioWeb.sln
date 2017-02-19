@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpioWeb.PluginRgbSimple", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Raspberry-Sharp-IO", "Raspberry-Sharp-IO", "{04981137-90D7-4C99-A10F-E1C6913B5C15}"
 	ProjectSection(SolutionItems) = preProject
+		Raspberry.Sharp.IO\Common.Logging.Core.dll = Raspberry.Sharp.IO\Common.Logging.Core.dll
+		Raspberry.Sharp.IO\Common.Logging.dll = Raspberry.Sharp.IO\Common.Logging.dll
 		Raspberry.Sharp.IO\Raspberry.IO.Components.dll = Raspberry.Sharp.IO\Raspberry.IO.Components.dll
 		Raspberry.Sharp.IO\Raspberry.IO.dll = Raspberry.Sharp.IO\Raspberry.IO.dll
 		Raspberry.Sharp.IO\Raspberry.IO.GeneralPurpose.dll = Raspberry.Sharp.IO\Raspberry.IO.GeneralPurpose.dll
