@@ -1,0 +1,15 @@
+﻿[
+  {
+    "$type": "GpioWeb.PluginLedBuzzerSimple.LedBuzzerSimpleAction, GpioWeb.PluginLedBuzzerSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "config": "LedBuzzerSimpleAction",
+    "enabled": true,
+    "preDelay": 0,
+    "postDelay": 0,
+    "startDuration": 2000,
+    "endDuration": 500,
+    "loops": 4,
+    "startValue": true,
+    "endValue": false,
+    "taskId": "73422b08-f3ef-4304-b9a1-984c4d221bc2"
+  }
+]

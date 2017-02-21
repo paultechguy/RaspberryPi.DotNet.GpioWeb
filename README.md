@@ -2,7 +2,7 @@ GPIO .NET Web Service Platform
 Copyright (c) 2017 Paul Carver
 
 # Web Service Introduction
-The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The service platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
+The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The service platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers, servos), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
 
 Several other web service endpoints exist to manage executing actions, these include listing actions and requesting deletion of an executing action.
 
@@ -80,6 +80,7 @@ You can view the GPIO example by viewing the .jpg images in the GpioWeb.ConsoleH
 * Magnetic buzzer
 * Single color LED
 * Three color RGB LED
+* Servo
 
 **Verify Web Service Running**  
 See the [Ping Test](#markdown-header-ping-test) section.
@@ -113,14 +114,15 @@ Plugin code is given the JSON instructions and will execute the proper logic to 
 Plugin configuration data is also given to the plugin code during execution so that the plugin can know about action-specific information.  For example, configuration data for the LED action indicates which GPIO pin the LED is connected to.  Since there could possibly be several individual LEDs on a breadboard, the plugin is given a set of configuration data that related to a specific LED.  Another example of possible configuration data is a Internet URI address that determines where a plugin will send temperature data.
 
 **Included Actions**  
-The GPIO web service comes pre-packaged with four (4) actions, along with a default set of configuration data for each action.  These actions are represented by .NET DLL files in the gpioweb.exe *plugin* directory; the configuration data for each action is located in the *config* directory.  The included actions are:
+The GPIO web service comes pre-packaged with five (5) actions, along with a default set of configuration data for each action.  These actions are represented by .NET DLL files in the gpioweb.exe *plugin* directory; the configuration data for each action is located in the *config* directory.  The included actions are:
 
 * BuzzerSimpleAction
 * LedSimpleAction
 * RgbSimpleAction
 * LedBuzzerSimpleAction
+* ServoSimpleAction
 
-Example JSON for each action can be found in each example project directory; the example JSON file name in each directory is *ExampleAction.json*.
+Example JSON for each action can be found in each example project directory; the example JSON file name in each directory is *ExampleAction\{action\}.json* (e.g. ExampleActionBuzzer).  If you don't have parts for a specific action, or just want to exclude that from executing, you can modify the *enabled* JSON property to a false value.
 
 **Submitting Actions**  
 You submit one or more actions, by POSTing a JSON array, to the following web service endpoint (adjust the host IP/name and port number as required):

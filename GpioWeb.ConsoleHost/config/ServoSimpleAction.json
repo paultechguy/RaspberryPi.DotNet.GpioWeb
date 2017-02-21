@@ -1,0 +1,9 @@
+﻿{
+  "i2cChannel": 0,
+  "i2cAddress": 64,
+  "i2cSdaBcmPin": 2,
+  "i2cSclBcmPin": 3,
+  "pmwFrequency": 60,
+  "pmwMinPulse": 190,
+  "pmwMaxPulse": 680
+}

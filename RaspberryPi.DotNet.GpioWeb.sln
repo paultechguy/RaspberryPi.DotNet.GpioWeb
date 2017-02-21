@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Raspberry-Sharp-IO", "Raspb
 		Raspberry.Sharp.IO\UnitsNet.dll = Raspberry.Sharp.IO\UnitsNet.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpioWeb.PluginServoSimple", "GpioWeb.PluginServoSimple\GpioWeb.PluginServoSimple.csproj", "{2BC24BDD-2392-44AF-93B8-FD13A4DA2C01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{F500DD04-1E98-4D75-B06C-F3EFF773A603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F500DD04-1E98-4D75-B06C-F3EFF773A603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F500DD04-1E98-4D75-B06C-F3EFF773A603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BC24BDD-2392-44AF-93B8-FD13A4DA2C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC24BDD-2392-44AF-93B8-FD13A4DA2C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC24BDD-2392-44AF-93B8-FD13A4DA2C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC24BDD-2392-44AF-93B8-FD13A4DA2C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

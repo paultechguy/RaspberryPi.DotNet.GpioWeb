@@ -23,6 +23,7 @@ using GpioWeb.PluginBuzzerSimple;
 using GpioWeb.PluginLedBuzzerSimple;
 using GpioWeb.PluginLedSimple;
 using GpioWeb.PluginRgbSimple;
+using GpioWeb.PluginServoSimple;
 using GpioWeb.GpioClientUtility;
 using GpioWeb.GpioCore;
 using Newtonsoft.Json;
@@ -146,6 +147,15 @@ Choice: ");
 					EndDurationMs = 500,
 					StartValue = true,
 					EndValue = false,
+				},
+				new ServoSimpleAction
+				{
+					ConfigName = "ServoSimpleAction",
+					Enabled = true,
+					PreDelayMs = 0,
+					PostDelayMs = 0,
+					RotationDegrees = new int[] { 0, 45, 90, 135, 180, 135, 90, 45, 0 },
+					RotationDelayMs = new int[] { 500, 500, 500, 500, 500, 500, 500, 500, 0 },
 				},
 			};
 

@@ -46,5 +46,14 @@
     "loops": 3,
     "startValue": true,
     "endValue": false
+  },
+  {
+    "$type": "GpioWeb.PluginServoSimple.ServoSimpleAction, GpioWeb.PluginServoSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "config": "ServoSimpleAction",
+    "enabled": true,
+    "preDelay": 1000,
+    "postDelay": 0,
+    "rotation": [ 0, 45, 90, 135, 180, 135, 90, 45, 0 ],
+    "rotationDelay": [ 500, 500, 500, 500, 500, 500, 500, 500, 0 ]
   }
 ]

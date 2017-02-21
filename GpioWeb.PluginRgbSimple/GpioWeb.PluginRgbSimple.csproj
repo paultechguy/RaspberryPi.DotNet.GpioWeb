@@ -65,7 +65,7 @@
     <Compile Include="RgbSimpleAction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ExampleAction.json">
+    <None Include="ExampleActionRgb.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
