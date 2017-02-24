@@ -2,7 +2,7 @@ GPIO .NET Web Service Platform
 Copyright (c) 2017 Paul Carver
 
 # Web Service Introduction
-The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The service platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers, servos), but the strength of the web service is the extensible plugin architecture.  This architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
+The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The development platform uses Microsoft Visual Studio for development and executes using [Mono](http://www.mono-project.com/) on a Raspberry Pi running Linux. The platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers, servos), but the strength of the web service is the extensible plugin architecture.  The architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
 
 Several other web service endpoints exist to manage executing actions, these include listing actions and requesting deletion of an executing action.
 
@@ -10,10 +10,12 @@ Several other web service endpoints exist to manage executing actions, these inc
 The repository has been tested with:
 
 * Debian 8.0 (jessie)
-* Mono 4.6.2
+* [Mono](http://www.mono-project.com/) 4.6.2
 * .NET 4.6.2
 * Raspberry Pi 2 B hardware board
 * [Raspberry# IO](https://github.com/raspberry-sharp/raspberry-sharp-io) as of February 1, 2017
+
+*To install Mono, see the [Mono download page](http://www.mono-project.com/download/).
 
 # Building Web Service
 The GPIO .NET Web Service Platform solution solution, RaspberryPi.GpioWeb.sln, can be built on a Windows computer using Visual Studio 2015.  You must have .NET 4.6.2+ installed.  After building the solution, copy the GpioWeb.ConsoleHost output to the Raspberry Pi to a directory of your choosing; the copy should include all files and sub-directories in the GpioWeb.ConsoleHost Release or Debug directory.
