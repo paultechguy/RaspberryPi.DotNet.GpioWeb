@@ -24,36 +24,47 @@ using Raspberry.IO.Components.Controllers.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.InterIntegratedCircuit;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using UnitsNet;
 
 namespace GpioWeb.PluginServoSimple
 {
 	public class HandlerLedSimpleAction : IActionHandler
 	{
+		private class RotateServoConfiguration
+		{
+			public Pca9685Connection PcaConnection { get; set; }
+			public PwmChannel PwmChannel { get; set; }
+			public int PwmMinimumPulse { get; set; }
+			public int PwmMaximumPulse { get; set; }
+			public int[] RotationDegree { get; set; }
+			public int[] RotationDelayMs { get; set; }
+		}
+
+		private int[] _pwmMinPulse;
+		private int[] _pwmMaxPulse;
+
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			ServoSimpleAction action = (ServoSimpleAction)baseAction;
-			ValidateAction(action);
+			ValidateSetup(config, action);
 
 			ProcessorPin sda = config.i2cSdaBcmPin;
 			ProcessorPin scl = config.i2cSclBcmPin;
 
 			using (var driver = new I2cDriver(sda, scl))
 			{
-				// get values set
-				int pwmMinPulse = config.pmwMinPulse;
-				int pwmMaxPulse = config.pmwMaxPulse;
-				PwmChannel channel = (PwmChannel)config.i2cChannel;
+				PwmChannel[] channels = Newtonsoft.Json.JsonConvert.DeserializeObject<PwmChannel[]>(config.i2cChannel.ToString());
 				int i2cAddress = config.i2cAddress;
-				int pwmFrequency = config.pmwFrequency;
+				int pwmFrequency = config.pwmFrequency;
 				Frequency frequency = Frequency.FromHertz(pwmFrequency);
 
 				// device support and prep channel
-				var device = new Pca9685Connection(driver.Connect(i2cAddress));
-				device.SetPwm(channel, 0, 0);
-				device.SetPwmUpdateRate(frequency);
+				var pcaConnection = new Pca9685Connection(driver.Connect(i2cAddress));
+				pcaConnection.SetPwmUpdateRate(frequency);
 
 				// pre delay
 				if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
@@ -62,22 +73,29 @@ namespace GpioWeb.PluginServoSimple
 				}
 
 				// handle each rotation
+				//
+				// Note: there could be more configured channels (i.e. servos) in the configuration; the user doesn't
+				//       have to use them all; we map the user's n array elements to first n configured channels in 
+				//       the server plugin config
+				List<Task> servoTasks = new List<Task>();
 				for (int i = 0; i < action.RotationDegrees.Length; ++i)
 				{
-					// rotate
-					int cycle;
-					if (!DegreeToCycle(action.RotationDegrees[i], out cycle, pwmMinPulse, pwmMaxPulse))
+					RotateServoConfiguration options = new RotateServoConfiguration
 					{
-						throw new ApplicationException($"Invalid rotation at index {i}: {action.RotationDegrees[i]}");
-					}
-					device.SetPwm(channel, 0, cycle);
+						PcaConnection = pcaConnection,
+						PwmChannel = channels[i],
+						PwmMaximumPulse = _pwmMaxPulse[i],
+						PwmMinimumPulse = _pwmMinPulse[i],
+						RotationDegree = action.RotationDegrees[i],
+						RotationDelayMs = action.RotationDelayMs[i],
+				};
 
-					// rotation wait until possible cancel
-					if (cancelToken.WaitHandle.WaitOne(action.RotationDelayMs[i]))
-					{
-						break;  // looks like we're cancelling
-					}
+					Task task = Task.Run(() => RotateServo(options, cancelToken));
+					servoTasks.Add(task);
 				}
+
+				// wait for all servos to complete
+				Task.WaitAll(servoTasks.ToArray());
 
 				// post delay
 				if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
@@ -85,6 +103,29 @@ namespace GpioWeb.PluginServoSimple
 					return;  // looks like we're cancelling
 				}
 
+			}
+		}
+
+		private void RotateServo(RotateServoConfiguration rotateConfig, CancellationToken cancelToken)
+		{
+			rotateConfig.PcaConnection.SetPwm(rotateConfig.PwmChannel, 0, 0);
+
+			for (int i = 0; i < rotateConfig.RotationDegree.Length; i++)
+			{
+				// rotate
+				int cycle;
+				if (!DegreeToCycle(rotateConfig.RotationDegree[i], out cycle, rotateConfig.PwmMinimumPulse, rotateConfig.PwmMaximumPulse))
+				{
+					throw new ApplicationException($"Invalid rotation at index {i}: {rotateConfig.RotationDegree[i]}");
+				}
+
+				rotateConfig.PcaConnection.SetPwm(rotateConfig.PwmChannel, 0, cycle);
+
+				// rotation wait until possible cancel
+				if (cancelToken.WaitHandle.WaitOne(rotateConfig.RotationDelayMs[i]))
+				{
+					break;  // looks like we're cancelling
+				}
 			}
 		}
 
@@ -105,18 +146,47 @@ namespace GpioWeb.PluginServoSimple
 			return status;
 		}
 
-		private void ValidateAction(ServoSimpleAction action)
+		private void ValidateSetup(dynamic config, ServoSimpleAction action)
 		{
 			// the rotation degrees and rotation delays arrays should the same length
 			if (action.RotationDegrees.Length != action.RotationDelayMs.Length)
 			{
-				throw new ApplicationException("RotationDegrees and RotationDelayMs array lengths are not the same");
+				throw new ApplicationException("rotation[] and rotationDelay[] lengths are not the same");
 			}
 
-			// rotation degrees must be 0 - 180
-			if (action.RotationDegrees.Any(r => r < 0 || r > 180))
+			//
+			// From this point we know the rotation degrees and delay are the same length so
+			// we can use either of them as a check value
+			//
+
+			// user's rotation stuff can't exceed the configured plugin channel count
+			int[] channels = Newtonsoft.Json.JsonConvert.DeserializeObject<int[]>(config.i2cChannel.ToString());
+			if (action.RotationDegrees.Length> channels.Length)
 			{
-				throw new ApplicationException("RotationDegrees array contains invalid rotation; not in range 0-180");
+				throw new ApplicationException($"rotationDegree[] and rotationDelay lengths cannot exceed maximum allowed by plugin configuration ({channels.Length})");
+			}
+
+			// rotation delay must be >= 0; rotation degrees must be 0 - 180
+			for (int i = 0; i < action.RotationDegrees.Length; i++)
+			{
+				if (action.RotationDelayMs[i].Any(d => d < 0))
+				{
+					throw new ApplicationException($"rotationDelay[{i}] has delay less than zero");
+				}
+
+				if (action.RotationDegrees[i].Any(r => r < 0 || r > 180))
+				{
+					throw new ApplicationException($"rotation[{i}] contains invalid rotation; must be in range 0-180");
+				}
+			}
+
+			// min/max pulses array lengths should be the same, and should be the
+			// same length as rotation array length
+			_pwmMinPulse = Newtonsoft.Json.JsonConvert.DeserializeObject<int[]>(config.pwmMinPulse.ToString());
+			_pwmMaxPulse = Newtonsoft.Json.JsonConvert.DeserializeObject<int[]>(config.pwmMaxPulse.ToString());
+			if ((_pwmMinPulse.Length != _pwmMaxPulse.Length) || (_pwmMinPulse.Length != channels.Length))
+			{
+				throw new ApplicationException($"config error: pwmMinPulse[] and pwmMaxPulse[] must be the same length as i2cChannel[]");
 			}
 		}
 

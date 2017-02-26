@@ -154,8 +154,9 @@ Choice: ");
 					Enabled = true,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
-					RotationDegrees = new int[] { 0, 45, 90, 135, 180, 135, 90, 45, 0 },
-					RotationDelayMs = new int[] { 500, 500, 500, 500, 500, 500, 500, 500, 0 },
+					// single int[] for degrees and delay assuming only a single servo
+					RotationDegrees = new int[][] { new int[] { 0, 45, 90, 135, 180, 135, 90, 45, 0 } },
+					RotationDelayMs = new int[][] { new int[] { 500, 500, 500, 500, 500, 500, 500, 500, 0 } },
 				},
 			};
 

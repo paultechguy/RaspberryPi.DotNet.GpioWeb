@@ -34,10 +34,10 @@ namespace GpioWeb.PluginServoSimple
 
 		// rotation on a server is 0 to 180
 		[JsonProperty(PropertyName = "rotation", Required = Required.Always)]
-		public int[] RotationDegrees { get; set; } = new int[0];
+		public int[][] RotationDegrees { get; set; } = new int[0][];
 
 		[JsonProperty(PropertyName = "rotationDelay", Required = Required.Always)]
-		public int[] RotationDelayMs { get; set; } = new int[0];
+		public int[][] RotationDelayMs { get; set; } = new int[0][];
 
 	}
 }
