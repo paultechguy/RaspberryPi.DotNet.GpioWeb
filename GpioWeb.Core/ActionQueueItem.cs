@@ -29,10 +29,22 @@ namespace GpioWeb.GpioCore
 		public ActionBase Action { get; set; }
 
 		[JsonIgnore]
+		public IActionHandler ActionHandler { get; set; }
+
+		[JsonIgnore]
 		public string ConfigName { get; set; }
 
 		[JsonProperty(PropertyName = "host")]
 		public string Host { get; set; }
+
+		[JsonProperty(PropertyName = "pluginState")]
+		public string PluginState
+		{
+			get
+			{
+				return ActionHandler == null ? string.Empty : ActionHandler.CurrentState;
+			}
+		}
 
 		public ActionQueueItem()
 		{
@@ -41,6 +53,7 @@ namespace GpioWeb.GpioCore
 
 		public ActionQueueItem(ActionBase action, string configName, string host)
 		{
+			ActionHandler = null;
 			Action = action;
 			ConfigName = configName;
 			Host = host;

@@ -28,14 +28,18 @@ namespace GpioWeb.PluginLedSimple
 {
 	public class HandlerLedSimpleAction : IActionHandler
 	{
+		private string _state = string.Empty;
+
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			LedSimpleAction action = (LedSimpleAction)baseAction;
 
 			// note that config is dynamic so we cast the pin values to integer
+			_state = "setup";
 			var connection = new MemoryGpioConnectionDriver();
 			var pin = connection.Out((ProcessorPin)config.pin);
 
+			_state = "preDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 			{
 				return;
@@ -43,26 +47,39 @@ namespace GpioWeb.PluginLedSimple
 
 			for (int loopCounter = 0; loopCounter < action.LoopCount; ++loopCounter)
 			{
+				_state = $"startValue_{loopCounter}";
 				pin.Write(action.StartValue);
 
 				// wait until possible cancel, but continue if cancelled to at least set end value
+				_state = $"startDuration_{loopCounter}";
 				cancelToken.WaitHandle.WaitOne(action.StartDurationMs);
 
 				// only output if it changes
 				if (action.EndValue != action.StartValue)
 				{
+					_state = $"endValue_{loopCounter}";
 					pin.Write(action.EndValue);
 				}
 
+				_state = $"endDuration_{loopCounter}";
 				if (cancelToken.WaitHandle.WaitOne(action.EndDurationMs))
 				{
 					return;
 				}
 			}
 
+			_state = "postDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 			{
 				return;
+			}
+		}
+
+		public string CurrentState
+		{
+			get
+			{
+				return _state;
 			}
 		}
 

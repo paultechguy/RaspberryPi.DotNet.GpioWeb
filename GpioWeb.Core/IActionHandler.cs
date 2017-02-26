@@ -29,5 +29,7 @@ namespace GpioWeb.GpioCore
 		void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config);
 
 		Type[] SupportedActions { get; }
+
+		string CurrentState { get; }
 	}
 }

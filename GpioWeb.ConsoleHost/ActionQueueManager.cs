@@ -254,6 +254,7 @@ namespace GpioWeb.GpioConsoleHost
 				{
 					CancellationToken token = cancelSource == null ? CancellationToken.None : cancelSource.Token;
 					IActionHandler handler = _actionHandlers[item.Action.GetType().FullName];
+					item.ActionHandler = handler;
 					handler.Action(item.Action, token, _configManager[item.ConfigName]);
 				}
 
@@ -320,7 +321,7 @@ namespace GpioWeb.GpioConsoleHost
 			ActionTaskItem taskItem = null;
 			if (_actionTasks.TryGetValue(taskId, out taskItem))
 			{
-				Log($"{nameof(this.GetTask)} returned , id: {taskItem.ToString()}");
+				Log($"{nameof(this.GetTask)} {taskItem.QueueAction.Action.ConfigName}, id: {taskId}");
 			}
 			else
 			{

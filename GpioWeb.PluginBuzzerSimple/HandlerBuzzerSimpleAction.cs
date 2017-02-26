@@ -28,6 +28,8 @@ namespace GpioWeb.PluginBuzzerSimple
 {
 	public class HandlerBuzzerSimpleAction : IActionHandler
 	{
+		private string _state = string.Empty;
+
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			// this is no different than a standard LED, but we'll have code
@@ -39,6 +41,7 @@ namespace GpioWeb.PluginBuzzerSimple
 			var connection = new MemoryGpioConnectionDriver();
 			var pin = connection.Out((ProcessorPin)config.pin);
 
+			_state = "preDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 			{
 				return;
@@ -46,26 +49,39 @@ namespace GpioWeb.PluginBuzzerSimple
 
 			for (int loopCounter = 0; loopCounter < action.LoopCount; ++loopCounter)
 			{
+				_state = $"startValue_{loopCounter}";
 				pin.Write(action.StartValue);
 
 				// wait until possible cancel, but continue if cancelled to at least set end value
+				_state = $"startDuration_{loopCounter}";
 				cancelToken.WaitHandle.WaitOne(action.StartDurationMs);
 
 				// only output if it changes
 				if (action.EndValue != action.StartValue)
 				{
+					_state = $"endValue_{loopCounter}";
 					pin.Write(action.EndValue);
 				}
 
+				_state = $"endDuration_{loopCounter}";
 				if (cancelToken.WaitHandle.WaitOne(action.EndDurationMs))
 				{
 					return;
 				}
 			}
 
+			_state = "postDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 			{
 				return;
+			}
+		}
+
+		public string CurrentState
+		{
+			get
+			{
+				return _state;
 			}
 		}
 

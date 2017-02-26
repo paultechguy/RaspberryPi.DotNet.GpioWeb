@@ -44,12 +44,15 @@ namespace GpioWeb.PluginServoSimple
 			public int[] RotationDelayMs { get; set; }
 		}
 
+		private string _state = string.Empty;
 		private int[] _pwmMinPulse;
 		private int[] _pwmMaxPulse;
 
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			ServoSimpleAction action = (ServoSimpleAction)baseAction;
+
+			SetState("validateSetup");
 			ValidateSetup(config, action);
 
 			ProcessorPin sda = config.i2cSdaBcmPin;
@@ -57,16 +60,19 @@ namespace GpioWeb.PluginServoSimple
 
 			using (var driver = new I2cDriver(sda, scl))
 			{
+				SetState("setup");
 				PwmChannel[] channels = Newtonsoft.Json.JsonConvert.DeserializeObject<PwmChannel[]>(config.i2cChannel.ToString());
 				int i2cAddress = config.i2cAddress;
 				int pwmFrequency = config.pwmFrequency;
 				Frequency frequency = Frequency.FromHertz(pwmFrequency);
 
 				// device support and prep channel
+				SetState("connection");
 				var pcaConnection = new Pca9685Connection(driver.Connect(i2cAddress));
 				pcaConnection.SetPwmUpdateRate(frequency);
 
 				// pre delay
+				SetState("preDelay");
 				if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 				{
 					return;  // looks like we're cancelling
@@ -80,6 +86,8 @@ namespace GpioWeb.PluginServoSimple
 				List<Task> servoTasks = new List<Task>();
 				for (int i = 0; i < action.RotationDegrees.Length; ++i)
 				{
+					SetState($"startRotate_{i}");
+
 					RotateServoConfiguration options = new RotateServoConfiguration
 					{
 						PcaConnection = pcaConnection,
@@ -95,14 +103,32 @@ namespace GpioWeb.PluginServoSimple
 				}
 
 				// wait for all servos to complete
+				SetState("waitEndRotation");
 				Task.WaitAll(servoTasks.ToArray());
 
 				// post delay
+				SetState("postDelay");
 				if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 				{
 					return;  // looks like we're cancelling
 				}
 
+			}
+		}
+
+		public string CurrentState
+		{
+			get
+			{
+				return _state;
+			}
+		}
+
+		private void SetState(string s)
+		{
+			lock (_state)
+			{
+				_state = s;
 			}
 		}
 
@@ -112,6 +138,8 @@ namespace GpioWeb.PluginServoSimple
 
 			for (int i = 0; i < rotateConfig.RotationDegree.Length; i++)
 			{
+				SetState($"rotate_{rotateConfig.PwmChannel}_{i}");
+
 				// rotate
 				int cycle;
 				if (!DegreeToCycle(rotateConfig.RotationDegree[i], out cycle, rotateConfig.PwmMinimumPulse, rotateConfig.PwmMaximumPulse))
@@ -122,6 +150,7 @@ namespace GpioWeb.PluginServoSimple
 				rotateConfig.PcaConnection.SetPwm(rotateConfig.PwmChannel, 0, cycle);
 
 				// rotation wait until possible cancel
+				SetState($"rotateDelay_c{rotateConfig.PwmChannel}_{i}");
 				if (cancelToken.WaitHandle.WaitOne(rotateConfig.RotationDelayMs[i]))
 				{
 					break;  // looks like we're cancelling

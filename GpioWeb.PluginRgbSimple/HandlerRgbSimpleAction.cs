@@ -28,11 +28,14 @@ namespace GpioWeb.PluginRgbSimple
 {
 	public class HandlerRgbSimpleAction : IActionHandler
 	{
+		private string _state = string.Empty;
+
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			RgbSimpleAction action = (RgbSimpleAction)baseAction;
 
 			// note that config is dynamic so we cast the pin values to integer
+			_state = "setup";
 			var connection = new MemoryGpioConnectionDriver();
 			var pins = new GpioOutputBinaryPin[]
 			{
@@ -41,6 +44,7 @@ namespace GpioWeb.PluginRgbSimple
 				connection.Out((ProcessorPin)config.pins[2])
 			};
 
+			_state = "preDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 			{
 				return;
@@ -50,10 +54,12 @@ namespace GpioWeb.PluginRgbSimple
 			{
 				for (int i = 0; i < pins.Length; ++i)
 				{
+					_state = $"startValue_{loopCounter}";
 					pins[i].Write(action.StartValues[i]);
 				}
 
 				// wait until possible cancel, but continue if cancelled to at least set end value
+				_state = $"startDuration_{loopCounter}";
 				cancelToken.WaitHandle.WaitOne(action.StartDurationMs);
 
 				for (int i = 0; i < pins.Length; ++i)
@@ -61,19 +67,30 @@ namespace GpioWeb.PluginRgbSimple
 					// only output if it changes
 					if (action.EndValues[i] != action.StartValues[i])
 					{
+						_state = $"endValue_{loopCounter}";
 						pins[i].Write(action.EndValues[i]);
 					}
 				}
 
+				_state = $"endDuration_{loopCounter}";
 				if (cancelToken.WaitHandle.WaitOne(action.EndDurationMs))
 				{
 					return;
 				}
 			}
 
+			_state = "postDelay";
 			if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 			{
 				return;
+			}
+		}
+
+		public string CurrentState
+		{
+			get
+			{
+				return _state;
 			}
 		}
 
