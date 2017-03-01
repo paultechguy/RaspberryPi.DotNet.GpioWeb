@@ -134,6 +134,7 @@ namespace GpioWeb.PluginServoSimple
 
 		private void RotateServo(RotateServoConfiguration rotateConfig, CancellationToken cancelToken)
 		{
+			// init
 			rotateConfig.PcaConnection.SetPwm(rotateConfig.PwmChannel, 0, 0);
 
 			for (int i = 0; i < rotateConfig.RotationDegree.Length; i++)

@@ -27,9 +27,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace GpioWeb.GpioConsoleHost.Controllers
 {
+	[EnableCors("*", "*", "*")]
 	public class GpioController : ApiController
 	{
 		#region public methods

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Microsoft.Owin.Cors;
 using Newtonsoft.Json;
 using Owin;
 using System.Web.Http;
@@ -39,6 +40,7 @@ namespace GpioWeb.GpioConsoleHost
 				 routeTemplate: "api/{controller}/{id}",
 				 defaults: new { id = RouteParameter.Optional });
 
+			appBuilder.UseCors(CorsOptions.AllowAll);
 			appBuilder.UseWebApi(config);
 
 			// we need his object formatter so that base types received get
