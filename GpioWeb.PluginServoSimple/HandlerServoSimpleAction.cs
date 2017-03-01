@@ -86,6 +86,12 @@ namespace GpioWeb.PluginServoSimple
 				List<Task> servoTasks = new List<Task>();
 				for (int i = 0; i < action.RotationDegrees.Length; ++i)
 				{
+					// if we're skipping this servo, loop to next
+					if (action.RotationDegrees.Length == 0)
+					{
+						continue;
+					}
+
 					SetState($"startRotate_{i}");
 
 					RotateServoConfiguration options = new RotateServoConfiguration
@@ -96,7 +102,7 @@ namespace GpioWeb.PluginServoSimple
 						PwmMinimumPulse = _pwmMinPulse[i],
 						RotationDegree = action.RotationDegrees[i],
 						RotationDelayMs = action.RotationDelayMs[i],
-				};
+					};
 
 					Task task = Task.Run(() => RotateServo(options, cancelToken));
 					servoTasks.Add(task);

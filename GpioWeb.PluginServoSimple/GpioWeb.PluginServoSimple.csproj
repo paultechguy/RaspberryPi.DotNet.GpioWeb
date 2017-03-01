@@ -87,6 +87,9 @@
       <Name>GpioWeb.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServoPanTiltDemo.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)GpioWeb.ConsoleHost\$(OutDir)plugin" md "$(SolutionDir)GpioWeb.ConsoleHost\$(OutDir)plugin"
