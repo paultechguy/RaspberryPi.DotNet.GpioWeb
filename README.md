@@ -2,7 +2,7 @@ GPIO .NET Web Service Platform
 Copyright (c) 2017 Paul Carver
 
 # Web Service Introduction
-The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The development platform uses Microsoft Visual Studio for development and executes using [Mono](http://www.mono-project.com/) on a Raspberry Pi running Linux. The platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers, servos), but the strength of the web service is the extensible plugin architecture.  The architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
+The GPIO .NET Service Platform allows client applications to POST an array of *actions*, formatted as JSON, in order to control components that are attached to the GPIO pins of the Raspberry Pi.  The development platform uses Microsoft Visual Studio for development and executes using [Mono](http://www.mono-project.com/) on a Raspberry Pi running Linux. The platform is written in C# and several basic actions are included (control LEDs, RGBs, Buzzers, temperature, servos), but the strength of the web service is the extensible plugin architecture.  The architecture allows developers to easily write their own .NET custom actions to leverage the Pi GPIO header; the web service host code does not have to be modified in order to begin using a new plugin (extensible).
 
 Several other web service endpoints exist to manage executing actions, these include listing actions and requesting deletion of an executing action.
 
@@ -82,6 +82,7 @@ You can view the GPIO example by viewing the .jpg images in the GpioWeb.ConsoleH
 * Magnetic buzzer
 * Single color LED
 * Three color RGB LED
+* TMP102 temperature sensor
 * Servo
 
 **Verify Web Service Running**  
@@ -122,6 +123,7 @@ The GPIO web service comes pre-packaged with five (5) actions, along with a defa
 * LedSimpleAction
 * RgbSimpleAction
 * LedBuzzerSimpleAction
+* TMP102SimpleAction
 * ServoSimpleAction
 
 Example JSON for each action can be found in each example project directory; the example JSON file name in each directory is *ExampleAction\{action\}.json* (e.g. ExampleActionBuzzer).  If you don't have parts for a specific action, or just want to exclude that from executing, you can modify the *enabled* JSON property to a false value.

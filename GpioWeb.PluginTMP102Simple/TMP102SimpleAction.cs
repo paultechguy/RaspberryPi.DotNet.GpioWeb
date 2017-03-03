@@ -19,44 +19,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using GpioWeb.GpioCore;
 using Newtonsoft.Json;
 
-namespace GpioWeb.GpioCore
+namespace GpioWeb.PluginTMP102Simple
 {
-	public class ActionQueueItem
+	public class TMP102SimpleAction : ActionBase
 	{
-		[JsonProperty(PropertyName = "action")]
-		public ActionBase Action { get; set; }
+		[JsonProperty(PropertyName = "preDelay", Required = Required.Always)]
+		public int PreDelayMs { get; set; } = 0;
 
-		[JsonIgnore]
-		public IActionHandler ActionHandler { get; set; }
+		[JsonProperty(PropertyName = "postDelay", Required = Required.Always)]
+		public int PostDelayMs { get; set; } = 0;
 
-		[JsonIgnore]
-		public string ConfigName { get; set; }
+		[JsonProperty(PropertyName = "readDelay", Required = Required.Always)]
+		public int ReadDelayMs { get; set; } = 0;
 
-		[JsonProperty(PropertyName = "host")]
-		public string Host { get; set; }
-
-		[JsonProperty(PropertyName = "pluginState")]
-		public object PluginState
-		{
-			get
-			{
-				return ActionHandler == null ? null : ActionHandler.CurrentState;
-			}
-		}
-
-		public ActionQueueItem()
-		{
+		[JsonProperty(PropertyName = "duration", Required = Required.Always)]
+		public int DurationMs { get; set; } = 0;
 
 		}
-
-		public ActionQueueItem(ActionBase action, string configName, string host)
-		{
-			ActionHandler = null;
-			Action = action;
-			ConfigName = configName;
-			Host = host;
-		}
-	}
 }

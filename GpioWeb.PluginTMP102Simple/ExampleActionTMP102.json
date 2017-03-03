@@ -1,0 +1,12 @@
+﻿[
+  {
+    "$type": "GpioWeb.PluginTMP102Simple.TMP102SimpleAction, GpioWeb.PluginTMP102Simple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "config": "TMP102SimpleAction",
+    "enabled": true,
+    "preDelay": 0,
+    "postDelay": 0,
+    "readDelay": 5000,
+    "duration": 0,
+    "taskId": "74d15766-9656-4d59-aada-970105cc4692"
+  }
+]

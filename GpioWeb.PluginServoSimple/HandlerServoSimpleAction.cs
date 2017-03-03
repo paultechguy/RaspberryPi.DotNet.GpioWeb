@@ -44,7 +44,7 @@ namespace GpioWeb.PluginServoSimple
 			public int[] RotationDelayMs { get; set; }
 		}
 
-		private string _state = string.Empty;
+		private object _state = null;
 		private int[] _pwmMinPulse;
 		private int[] _pwmMaxPulse;
 
@@ -122,7 +122,7 @@ namespace GpioWeb.PluginServoSimple
 			}
 		}
 
-		public string CurrentState
+		public object CurrentState
 		{
 			get
 			{
@@ -134,7 +134,7 @@ namespace GpioWeb.PluginServoSimple
 		{
 			lock (_state)
 			{
-				_state = s;
+				_state = new { state = s };
 			}
 		}
 

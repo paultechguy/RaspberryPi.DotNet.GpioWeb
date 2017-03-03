@@ -30,6 +30,9 @@ namespace GpioWeb.GpioCore
 
 		Type[] SupportedActions { get; }
 
-		string CurrentState { get; }
+		/// <summary>
+		/// object state (of plugin) which will be serialized to json
+		/// </summary>
+		object CurrentState { get; }
 	}
 }

@@ -28,19 +28,19 @@ namespace GpioWeb.PluginLedBuzzerSimple
 {
 	public class HandlerLedBuzzerSimpleAction : IActionHandler
 	{
-		private string _state = string.Empty;
+		private object _state = null;
 
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
 			LedBuzzerSimpleAction action = (LedBuzzerSimpleAction)baseAction;
 
 			// note that config is dynamic so we cast the pin values to integer
-			_state = "setup";
+			_state = new { state = "setup" };
 			var connection = new MemoryGpioConnectionDriver();
 			var pinLed = connection.Out((ProcessorPin)config.pinLed);
 			var pinBuzzer = connection.Out((ProcessorPin)config.pinBuzzer);
 
-			_state = "preDelay";
+			_state = new { state = "preDelay" };
 			if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 			{
 				return;
@@ -48,37 +48,37 @@ namespace GpioWeb.PluginLedBuzzerSimple
 
 			for (int loopCounter = 0; loopCounter < action.LoopCount; ++loopCounter)
 			{
-				_state = $"startValue_{loopCounter}";
+				_state = new { state = $"startValue_{loopCounter}" };
 				pinLed.Write(action.StartValue);
 				pinBuzzer.Write(action.StartValue);
 
 				// wait until possible cancel, but continue if cancelled to at least set end value
-				_state = $"startDuration_{loopCounter}";
+				_state = new { state = $"startDuration_{loopCounter}" };
 				cancelToken.WaitHandle.WaitOne(action.StartDurationMs);
 
 				// only output if it changes
 				if (action.EndValue != action.StartValue)
 				{
-					_state = $"endValue_{loopCounter}";
+					_state = new { state = $"endValue_{loopCounter}" };
 					pinLed.Write(action.EndValue);
 					pinBuzzer.Write(action.EndValue);
 				}
 
-				_state = $"endDuration_{loopCounter}";
+				_state = new { state = $"endDuration_{loopCounter}" };
 				if (cancelToken.WaitHandle.WaitOne(action.EndDurationMs))
 				{
 					return;
 				}
 			}
 
-			_state = "postDelay";
+			_state = new { state = "postDelay" };
 			if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 			{
 				return;
 			}
 		}
 
-		public string CurrentState
+		public object CurrentState
 		{
 			get
 			{

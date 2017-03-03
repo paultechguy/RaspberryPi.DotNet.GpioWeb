@@ -1,0 +1,5 @@
+﻿{
+  "i2cAddress": 72,
+  "i2cSdaBcmPin": 2,
+  "i2cSclBcmPin": 3
+}

@@ -28,7 +28,7 @@ namespace GpioWeb.PluginBuzzerSimple
 {
 	public class HandlerBuzzerSimpleAction : IActionHandler
 	{
-		private string _state = string.Empty;
+		private object _state = null;
 
 		public void Action(ActionBase baseAction, CancellationToken cancelToken, dynamic config)
 		{
@@ -41,7 +41,7 @@ namespace GpioWeb.PluginBuzzerSimple
 			var connection = new MemoryGpioConnectionDriver();
 			var pin = connection.Out((ProcessorPin)config.pin);
 
-			_state = "preDelay";
+			_state = new { state = "preDelay" };
 			if (cancelToken.WaitHandle.WaitOne(action.PreDelayMs))
 			{
 				return;
@@ -49,17 +49,17 @@ namespace GpioWeb.PluginBuzzerSimple
 
 			for (int loopCounter = 0; loopCounter < action.LoopCount; ++loopCounter)
 			{
-				_state = $"startValue_{loopCounter}";
+				_state = new { state = $"startValue_{loopCounter}" };
 				pin.Write(action.StartValue);
 
 				// wait until possible cancel, but continue if cancelled to at least set end value
-				_state = $"startDuration_{loopCounter}";
+				_state = new { state = $"startDuration_{loopCounter}" };
 				cancelToken.WaitHandle.WaitOne(action.StartDurationMs);
 
 				// only output if it changes
 				if (action.EndValue != action.StartValue)
 				{
-					_state = $"endValue_{loopCounter}";
+					_state = new { state = $"endValue_{loopCounter}" };
 					pin.Write(action.EndValue);
 				}
 
@@ -70,14 +70,14 @@ namespace GpioWeb.PluginBuzzerSimple
 				}
 			}
 
-			_state = "postDelay";
+			_state = new { state = "postDelay" };
 			if (cancelToken.WaitHandle.WaitOne(action.PostDelayMs))
 			{
 				return;
 			}
 		}
 
-		public string CurrentState
+		public object CurrentState
 		{
 			get
 			{
