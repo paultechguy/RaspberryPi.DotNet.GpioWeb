@@ -31,6 +31,8 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Net;
+using GpioWeb.PluginTMP102Simple;
+using System.Linq;
 
 namespace GpioWeb.GpioConsoleClient
 {
@@ -92,8 +94,19 @@ Choice: ");
 
 		private async void SendJsonFileAsync()
 		{
-			string json = File.ReadAllText("SendJsonFile.json");
-			await _gpioClient.SendActionAsync<dynamic>(JsonConvert.DeserializeObject(json), "/gpio/action");
+			string filename = "SendJsonFile.json";
+			string json = File.ReadAllText(filename);
+
+			// make sure we have actions enabled for at least one bread board component
+			var actions = JsonConvert.DeserializeObject<ActionBase[]>(json);
+			if (!actions.Any(a => a.Enabled))
+			{
+				Console.WriteLine($"%No actions enabled in file {filename}; modify {"SendJsonFile.json"} to enable those actions you have the bread board configured for.\n");
+			}
+			else
+			{
+				await _gpioClient.SendActionAsync<dynamic>(JsonConvert.DeserializeObject(json), "/gpio/action");
+			}
 		}
 
 		private async void SendCsObject()
@@ -103,7 +116,7 @@ Choice: ");
 				new BuzzerSimpleAction
 				{
 					ConfigName = "BuzzerSimpleAction",
-					Enabled = true,
+					Enabled = false,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
 					LoopCount = 3,
@@ -115,7 +128,7 @@ Choice: ");
 				new LedSimpleAction
 				{
 					ConfigName = "LedSimpleAction",
-					Enabled = true,
+					Enabled = false,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
 					LoopCount = 3,
@@ -127,7 +140,7 @@ Choice: ");
 				new RgbSimpleAction
 				{
 					ConfigName = "RgbSimpleAction",
-					Enabled = true,
+					Enabled = false,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
 					LoopCount = 3,
@@ -139,7 +152,7 @@ Choice: ");
 				new LedBuzzerSimpleAction
 				{
 					ConfigName = "LedBuzzerSimpleAction",
-					Enabled = true,
+					Enabled = false,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
 					LoopCount = 3,
@@ -151,19 +164,35 @@ Choice: ");
 				new ServoSimpleAction
 				{
 					ConfigName = "ServoSimpleAction",
-					Enabled = true,
+					Enabled = false,
 					PreDelayMs = 0,
 					PostDelayMs = 0,
 					// single int[] for degrees and delay assuming only a single servo
 					RotationDegrees = new int[][] { new int[] { 0, 45, 90, 135, 180, 135, 90, 45, 0 } },
 					RotationDelayMs = new int[][] { new int[] { 500, 500, 500, 500, 500, 500, 500, 500, 0 } },
 				},
+				new TMP102SimpleAction
+				{
+					ConfigName = "TMP102SimpleAction",
+					Enabled = false,
+					PreDelayMs = 0,
+					PostDelayMs = 0,
+					ReadDelayMs = 5,
+					DurationMs = 30000, // 30 seconds
+				},
 			};
 
-			string json = JsonConvert.SerializeObject(
-				actions,
-				new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects, TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full });
-			await _gpioClient.SendActionAsync<dynamic>(JsonConvert.DeserializeObject(json), "/gpio/action");
+			if (!actions.Any(a => a.Enabled))
+			{
+				Console.WriteLine("%No actions enabled in code; modify SendCsObject() to enable those actions you have the bread board configured for.\n");
+			}
+			else
+			{
+				string json = JsonConvert.SerializeObject(
+					actions,
+					new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects, TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full });
+				await _gpioClient.SendActionAsync<dynamic>(JsonConvert.DeserializeObject(json), "/gpio/action");
+			}
 		}
 
 		private void Initialize()

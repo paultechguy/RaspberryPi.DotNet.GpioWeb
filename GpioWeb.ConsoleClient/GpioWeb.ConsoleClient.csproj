@@ -88,6 +88,10 @@
       <Project>{2bc24bdd-2392-44af-93b8-fd13a4da2c01}</Project>
       <Name>GpioWeb.PluginServoSimple</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GpioWeb.PluginTMP102Simple\GpioWeb.PluginTMP102Simple.csproj">
+      <Project>{c0a729e7-3f5c-48ec-8ba7-c235bc75aacf}</Project>
+      <Name>GpioWeb.PluginTMP102Simple</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
   {
     "$type": "GpioWeb.PluginBuzzerSimple.BuzzerSimpleAction, GpioWeb.PluginBuzzerSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "config": "BuzzerSimpleAction",
-    "enabled": true,
+    "enabled": false,
     "preDelay": 0,
     "postDelay": 0,
     "startDuration": 1000,
@@ -14,7 +14,7 @@
   {
     "$type": "GpioWeb.PluginLedSimple.LedSimpleAction, GpioWeb.PluginLedSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "config": "LedSimpleAction",
-    "enabled": true,
+    "enabled": false,
     "preDelay": 0,
     "postDelay": 0,
     "startDuration": 1000,
@@ -26,7 +26,7 @@
   {
     "$type": "GpioWeb.PluginRgbSimple.RgbSimpleAction, GpioWeb.PluginRgbSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "config": "RgbSimpleAction",
-    "enabled": true,
+    "enabled": false,
     "preDelay": 0,
     "postDelay": 0,
     "startDuration": 1000,
@@ -38,7 +38,7 @@
   {
     "$type": "GpioWeb.PluginLedBuzzerSimple.LedBuzzerSimpleAction, GpioWeb.PluginLedBuzzerSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "config": "LedBuzzerSimpleAction",
-    "enabled": true,
+    "enabled": false,
     "preDelay": 0,
     "postDelay": 0,
     "startDuration": 1000,
@@ -50,10 +50,19 @@
   {
     "$type": "GpioWeb.PluginServoSimple.ServoSimpleAction, GpioWeb.PluginServoSimple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "config": "ServoSimpleAction",
-    "enabled": true,
+    "enabled": false,
     "preDelay": 1000,
     "postDelay": 0,
     "rotation": [ [ 0, 45, 90, 135, 180, 135, 90, 45, 0 ] ],
     "rotationDelay": [ [ 500, 500, 500, 500, 500, 500, 500, 500, 0 ] ]
+  },
+  {
+    "$type": "GpioWeb.PluginTMP102Simple.TMP102SimpleAction, GpioWeb.PluginTMP102Simple, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "config": "TMP102SimpleAction",
+    "enabled": false,
+    "preDelay": 0,
+    "postDelay": 0,
+    "readDelay": 5000,
+    "duration": 30000
   }
 ]
