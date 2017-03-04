@@ -44,7 +44,7 @@ namespace GpioWeb.PluginServoSimple
 			public int[] RotationDelayMs { get; set; }
 		}
 
-		private object _state = null;
+		private static object _state = new { state = "init" }; // something for the default on first lock so we don't crash
 		private int[] _pwmMinPulse;
 		private int[] _pwmMaxPulse;
 
@@ -130,7 +130,7 @@ namespace GpioWeb.PluginServoSimple
 			}
 		}
 
-		private void SetState(string s)
+		private static void SetState(string s)
 		{
 			lock (_state)
 			{
