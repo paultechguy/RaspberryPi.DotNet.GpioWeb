@@ -28,7 +28,7 @@ using System.Threading;
 
 namespace GpioWeb.PluginTMP102Simple
 {
-	public class HandlerLedSimpleAction : IActionHandler
+	public class HandlerTMP102SimpleAction : IActionHandler
 	{
 		private object _state = null;
 
