@@ -154,7 +154,9 @@ The most common case for adding a startup action is when a long-executing action
 **Note:** See [Tasks](#markdown-header-tasks) for information on long-executing actions.
 
 ## Tasks
-There may be cases where you would like to execute actions, either in parallel with each other, or for a long duration (long-executing action).  Without task support, each action is executed synchronously, one at a time in the order they were submitted to the web service for execution.  Sometimes this synchronous execution is desired, but there may be other times when want to asynchronously execute two actions in parallel or have an action execute until the web service stops.  Asynchronous tasks provide the support to accomplish this.
+There may be cases where you would like to execute actions, either in parallel with each other, or for a long duration (long-executing action).  Without task support, each action is executed synchronously, one at a time in the order they were submitted to the web service for execution.  Sometimes this synchronous execution is desired, but there may be other times when want to asynchronously execute two actions in parallel or have an action execute until the web service stops.
+
+An example of a long-executing task is the TMP102 temperature plugin that is included in the GpioWeb repository. You can add the action to the *startup* directory for the web service in order to always have access to a temperature reading.  By setting the *duration* property of the TMP102 action to zero (0), the plugin will execute until the task is deleted or the web service is shut down.
 
 To convert an action from synchronous to asynchronous, simply add a **unique** *taskId* property to the action JSON:
 
@@ -176,6 +178,16 @@ You can also get a list of all executing actions, in JSON format, by performing 
 Finally, if you want to get information on just a single executing action, you can perform a GET on the following web service endpoint:
 
 	http://127.0.0.1:8020/gpio/task/taskId
+
+Action plugins must implement the *CurrentState* interface method. The *CurrentState* value is returned as part of the GET endpoint for a specific task.  Thus it is possible to gather information about a task in order to determine its current state. For example, the long-executing TMP102 plugin will return information on the current temperature:
+
+	"pluginState": {
+		...
+		"date": "2017-03-05T20:16:36.3203770Z",
+		"temperatureF": 65.525,
+		"temperatureC": 18.625
+		...
+	}
 
 # Writing GPIO Action Plugins
 Coming soon.  If you can't wait, you can use the existing Visual Studio GpioWeb.PluginLedSimple project as a template to create your own project.  Hint...when all is said and done, you will place your new plugin DLL file(s) into the *plugin* directory and create a configuration file in the *instance* directory. The included plugin projects include *Post Build* events that copy the plugin DLL automatically to the GpioWeb.ConsoleHost bin directory so you can just copy/paste these into your own plugin project.
