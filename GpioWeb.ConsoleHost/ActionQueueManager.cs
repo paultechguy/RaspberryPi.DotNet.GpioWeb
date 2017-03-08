@@ -255,7 +255,15 @@ namespace GpioWeb.GpioConsoleHost
 					CancellationToken token = cancelSource == null ? CancellationToken.None : cancelSource.Token;
 					IActionHandler handler = _actionHandlers[item.Action.GetType().FullName];
 					item.ActionHandler = handler;
-					handler.Action(item.Action, token, _configManager[item.ConfigName]);
+
+					// get config; allow it an action to have an empty config
+					dynamic config = null;
+					string configName = item.ConfigName.Trim();
+					if (!string.IsNullOrWhiteSpace(configName))
+					{
+						config = _configManager[configName];
+					}
+					handler.Action(item.Action, token, config);
 				}
 
 				Console.WriteLine($"End{threaded}{simulated} action {item.Action.GetType().Name}, config: {item.Action.ConfigName} ({item.Host})");
