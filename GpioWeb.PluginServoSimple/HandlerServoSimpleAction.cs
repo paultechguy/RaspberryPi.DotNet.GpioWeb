@@ -108,8 +108,8 @@ namespace GpioWeb.PluginServoSimple
 					servoTasks.Add(task);
 				}
 
-				// wait for all servos to complete
-				SetState("waitEndRotation");
+				// wait for all servos to complete; don't set state since tasks will be doing that
+				// as the servos rotate
 				Task.WaitAll(servoTasks.ToArray());
 
 				// post delay

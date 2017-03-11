@@ -4,6 +4,9 @@ PaulTechGuy.RPi.DotNetKickstart
 GPIO Web Service Platform
 Copyright (c) 2017 Paul Carver
 
+# Writing GPIO Action Plugins
+The best way to understand how to write your own plugins for GpioWeb is to [watch this video](https://youtu.be/PwNvpr27Gw4) which explains everything you will need to do in order to write and deploy a custom plugin.
+
 # References
 These files are part of the Raspberry# IO github files found at https://github.com/raspberry-sharp/raspberry-sharp-io. These files provide the low-level access to the GPIO pins and supported devices.
 

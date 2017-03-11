@@ -190,7 +190,7 @@ Action plugins must implement the *CurrentState* interface method. The *CurrentS
 	}
 
 # Writing GPIO Action Plugins
-Coming soon.  If you can't wait, you can use the existing Visual Studio GpioWeb.PluginLedSimple project as a template to create your own project.  Hint...when all is said and done, you will place your new plugin DLL file(s) into the *plugin* directory and create a configuration file in the *instance* directory. The included plugin projects include *Post Build* events that copy the plugin DLL automatically to the GpioWeb.ConsoleHost bin directory so you can just copy/paste these into your own plugin project.
+The best way to understand how to write your own plugins for GpioWeb is to [watch this video](https://youtu.be/PwNvpr27Gw4) which explains everything you will need to do in order to write and deploy a custom plugin.
 
 # Additional Learning Resources
 The [RaspberryPi.DotNet.GpioExamples](https://bitbucket.org/PaulTechGuy/raspberrypi.dotnet.gpioexamples) repository contains a great set example programs written in C# to help you learn to control components that are attached to the GPIO pins of the Raspberry Pi.
